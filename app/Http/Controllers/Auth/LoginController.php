@@ -6,6 +6,12 @@ use App\Http\Controllers\Controller;
 use App\Providers\RouteServiceProvider;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use App\Cart;
+use App\CartItem;
+use Session;
+
 class LoginController extends Controller
 {
     /*
@@ -36,5 +42,30 @@ class LoginController extends Controller
     public function __construct()
     {
         $this->middleware('guest')->except('logout');
+    }
+
+    public function showLoginForm()
+    {
+        $link = url()->previous();
+        session(['link' => $link]);
+        return view('auth.login');
+    }
+
+    protected function authenticated(Request $request, $user)
+    {
+        $user_id = Auth::user()->id;
+        $cartId = Cart::where('user_id', "$user_id")
+            ->where('status', 'Pending')
+            ->pluck('id');
+        if ($cartId->isEmpty()) {
+            $count = 0;
+        }
+        else{
+            $cartId = $cartId[0];
+            $count = CartItem::where('cart_id', "$cartId")
+            ->count();
+        }
+        Session::put('countItem', $count);
+        return redirect(session('link'));
     }
 }

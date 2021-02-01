@@ -13,17 +13,28 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
+Route::get('/', 'ProductController@index');
 
 Auth::routes();
 
-Route::get('/home', 'HomeController@index')->name('home');
+//view catalogue route
+Route::get('/home', 'ProductController@index')->name('home');
 Route::get('/catalogue', 'ProductController@index')->name('catalogueList');
 Route::get('/catalogue/{page}', 'ProductController@index');
 
-
+//view product detail route
 Route::get('/product/{id}', 'ProductController@details');
-Route::get('/catalogue2', 'ProductController@index2');
-Route::get('/catalogue2/{page}', 'ProductController@index2');
+Route::get('/cart', 'CartController@index')->name('showCart');
+
+//cart route
+Route::post('/cart/store', 'CartController@store')->name('cartStore');
+Route::post('/cart/delete', 'CartController@removeItem')->name('cartItemRemove');
+Route::post('/cart/updateQty', 'CartController@updateQty')->name('cartItemQty');
+
+//order purchased route
+Route::get('/purchased', 'OrderController@index')->name('showOrder');
+Route::post('/order/store', 'OrderController@store')->name('orderStore');
+
+//admin route
+Route::get('/order', 'OrderController@manageOrder')->name('manageOrder');
+Route::post('/order/update', 'OrderController@update')->name('orderUpdate');

@@ -12,16 +12,46 @@
     <link rel="stylesheet" href="{{ url('/') }}/assets/fonts/simple-line-icons.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/baguettebox.js/1.10.0/baguetteBox.min.css">
     <link rel="stylesheet" href="{{ url('/') }}/assets/css/smoothproducts.css">
+
+    <style>
+        .spin {
+            -webkit-animation: spin .8s ease infinite;
+            animation: spin .8s ease infinite;
+        }
+
+        @-webkit-keyframes spin {
+            from {
+                -webkit-transform: rotate(0deg);
+                transform: rotate(0deg);
+            }
+
+            to {
+                -webkit-transform: rotate(359deg);
+                transform: rotate(359deg);
+            }
+        }
+
+        @keyframes spin {
+            from {
+                -webkit-transform: rotate(0deg);
+                transform: rotate(0deg);
+            }
+
+            to {
+                -webkit-transform: rotate(359deg);
+                transform: rotate(359deg);
+            }
+        }
+    </style>
     @yield('head')
 </head>
 
 <body>
     <nav class="navbar navbar-light navbar-expand-lg fixed-top bg-white clean-navbar">
-        <div class="container"><a class="navbar-brand logo" href="#">{{ config('app.name', 'Laravel') }}</a><button data-toggle="collapse" class="navbar-toggler" data-target="#navcol-1"><span class="sr-only">Toggle navigation</span><span class="navbar-toggler-icon"></span></button>
+        <div class="container"><a class="navbar-brand logo" href="{{ route('home') }}">{{ config('app.name', 'Laravel') }}</a><button data-toggle="collapse" class="navbar-toggler" data-target="#navcol-1"><span class="sr-only">Toggle navigation</span><span class="navbar-toggler-icon"></span></button>
             <div class="collapse navbar-collapse" id="navcol-1">
                 <ul class="nav navbar-nav ml-auto">
-                    <li class="nav-item"><a class="nav-link" href="index.html">Home</a></li>
-                    <li class="nav-item"><a class="nav-link" href="index.html"><i class="fa fa-shopping-cart"></i> Cart(1)</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{{ route('catalogueList') }}">Catalogue</a></li>
                     @guest
                     <li class="nav-item">
                         <a class="nav-link" href="{{ route('login') }}">{{ __('Login') }}</a>
@@ -32,6 +62,16 @@
                     </li>
                     @endif
                     @else
+                   
+                    @if(!Auth::user()->accessRights->isEmpty())
+                    @foreach(Auth::user()->accessRights as $access)
+                    @if($access->grant == 'manage_order')
+                    <li class="nav-item"><a class="nav-link" href="{{ route('manageOrder') }}">Manage Orders</a></li>
+                    @endif
+                    @endforeach
+                    @endif
+                    <li class="nav-item"><a class="nav-link" href="{{ route('showOrder') }}"><i class="fa fa-shopping-bag"></i> My Purchased</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{{ route('showCart') }}"><i class="fa fa-shopping-cart"></i> Cart(@if(Session::has('countItem')){{ Session::get('countItem')}}@endif)</a></li>
                     <li class="nav-item dropdown">
                         <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
                             {{ Auth::user()->name }}
@@ -101,6 +141,8 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/baguettebox.js/1.10.0/baguetteBox.min.js"></script>
     <script src="{{ url('/') }}/assets/js/smoothproducts.min.js"></script>
     <script src="{{ url('/') }}/assets/js/theme.js"></script>
+    <script></script>
+    @yield('bottom')
 </body>
 
 </html>

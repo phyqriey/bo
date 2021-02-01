@@ -18,6 +18,9 @@
                 <p>CNY Sales Shop now!</p>
             </div>
             <div class="content">
+                @if($result['header']['X-WP-Total'] == '0')
+                <h4>System Maintenance</h4>
+                @else
                 <div class="row">
                     <div class="col-md-12">
                     <div class="col-12 pt-3 text-right"> Showing <b>10</b> of <b>{{$result['header']['X-WP-Total']}}</b> products</div>
@@ -26,8 +29,8 @@
                                 @foreach($result['body'] as $product)
                                 <div class="col-12 col-md-6 col-lg-4">
                                     <div class="clean-product-item">
-                                        <div class="image"><a target="_blank" href="{{ url('/') }}/product/{{$product->id}}"><img class="img-fluid d-block mx-auto" src="{{$product->images[0]->src}}"></a></div>
-                                        <div class="product-name"><a target="_blank" href="{{ url('/') }}/product/{{$product->id}}">{{$product->name}}</a>
+                                        <div class="image"><a href="{{ url('/') }}/product/{{$product->id}}"><img class="img-fluid d-block mx-auto" src="{{$product->images[0]->src}}"></a></div>
+                                        <div class="product-name"><a href="{{ url('/') }}/product/{{$product->id}}">{{$product->name}}</a>
                                         @php
                                         if(strlen($product->name)<35){
                                             echo '<br><br>';
@@ -63,8 +66,8 @@
                                                     <h6></h6>
                                                     @endif
                                                     @endif
-                                                    <button class="btn btn-primary btn-sm" type="button"><i class="icon-basket"></i>
-                                                    Add to Cart</button>
+                                                    <a class="btn btn-primary btn-sm" href="{{ url('/') }}/product/{{$product->id}}" target="_blank" type="button"><i class="icon-basket"></i>
+                                                    Add to Cart</a>
                                         </div>
                                     </div>
                                 </div>
@@ -104,6 +107,7 @@
                         </div>
                     </div>
                 </div>
+                @endif
             </div>
         </div>
     </section>

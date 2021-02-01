@@ -1,18 +1,23 @@
 @extends('layouts.app2')
 @section('head')
 <style>
-.clean-product-item .image img {
-    width: 100%;
-    height: 330px;
-    max-width: 330px;
-    max-height: 330px;
-}
+    .clean-product-item .image img {
+        width: 100%;
+        height: 330px;
+        max-width: 330px;
+        max-height: 330px;
+    }
 </style>
 @endsection
 @section('content')
 <main class="page product-page">
     <section class="clean-block clean-product dark">
         <div class="container">
+            @if(isset($detail['result']))
+            <div class="block-heading">
+                <h2 class="text-info">System Maintenance</h2>
+            </div>
+            @else
             <div class="block-heading">
                 <h2 class="text-info">Product Page</h2>
                 <p>Buy Now ! Hot Selling</p>
@@ -23,31 +28,57 @@
                         <div class="col-md-6">
                             <div class="gallery">
                                 <div class="sp-wrap">
-                                    <a href="{{ url('/') }}/assets/img/tech/image1.jpg">
-                                    <img class="img-fluid d-block mx-auto" src="{{ url('/') }}/assets/img/tech/image1.jpg"></a>
-                                    <a href="{{ url('/') }}/assets/img/tech/image1.jpg">
-                                    <img class="img-fluid d-block mx-auto" src="{{ url('/') }}/assets/img/tech/image1.jpg"></a>
-                                    <a href="{{ url('/') }}/assets/img/tech/image1.jpg">
-                                    <img class="img-fluid d-block mx-auto" src="{{ url('/') }}/assets/img/tech/image1.jpg"></a>
+                                    @php
+                                    $arr_url=array();
+                                    foreach($detail['images'] as $imgurl){
+                                    if(!in_array($imgurl,$arr_url)){
+                                    echo '<a href="'.$imgurl.'">
+                                        <img class="img-fluid d-block mx-auto" src="'.$imgurl.'">
+                                    </a>';
+                                    array_push($arr_url,$imgurl);
+                                    }
+                                    }
+                                    @endphp
                                 </div>
                             </div>
                         </div>
                         <div class="col-md-6">
                             <div class="info">
-                                <h3>{{$detail->name}}</h3>
-                                <div class="rating"><h4>{{$detail->sku}}</h4></div>
+                                <h3 id="item_name">{{$detail['name']}}</h3>
+                                <div class="rating">
+                                    <h4>{{$detail['sku']}}</h4>
+                                </div>
                                 <div class="price">
-                                    <h3>RM {{number_format($detail->regular_price,2)}}</h3>
-                                </div><button class="btn btn-primary" type="button"><i class="icon-basket"></i>Add to
+                                    @if($detail['type']=='variable')
+                                    <h3 id="price_text"></h3>
+                                    <label>Variant: </label>
+                                    <select id="variant" class="form-control-sm">
+                                        <option value="" selected disabled>Please Select</option>
+                                        @php
+                                        foreach($detail['attribute'] as $key=>$value){
+                                        $value=($value=='')?$key:$value;
+                                        echo '<option value="'.$key.'">'.$value.'</option>';
+                                        }
+                                        @endphp
+                                    </select>
+                                    <div id="variant_error" class="text-danger d-none">Please select variant</div>
+                                    @else
+                                    <input id="price" type="hidden" value="{{$detail['price']}}">
+                                    <input id="item_id" type="hidden" value="{{$detail['id']}}">
+                                    <h3 id="price_text">RM {{number_format($detail['price'],2)}}</h3>
+                                    @endif
+                                    <div class="price"><label>Quantity: </label><input id="quantity" type="number" class="form-control-sm" required value="1" min="1" /></div>
+                                </div>
+                                <button id="addToCart" class="btn btn-primary" type="button"><i class="icon-basket"></i>Add to
                                     Cart</button>
                                 <div class="summary">
                                     <p>
                                         @php
-                                        if($detail->description!=''){
-                                            echo $detail->description;
+                                        if($detail['description']!=''){
+                                        echo $detail['description'];
                                         }
                                         else{
-                                            echo 'No description';
+                                        echo 'No description';
                                         }
                                         @endphp
                                     </p>
@@ -56,115 +87,111 @@
                         </div>
                     </div>
                 </div>
-                <div class="d-none product-info">
-                    <div>
-                        <ul class="nav nav-tabs" role="tablist" id="myTab">
-                            <li class="nav-item" role="presentation"><a class="nav-link active" role="tab"
-                                    data-toggle="tab" id="description-tab" href="#description">Description</a></li>
-                            <li class="nav-item" role="presentation"><a class="nav-link" role="tab" data-toggle="tab"
-                                    id="specifications-tabs" href="#specifications">Specifications</a></li>
-                            <li class="nav-item" role="presentation"><a class="nav-link" role="tab" data-toggle="tab"
-                                    id="reviews-tab" href="#reviews">Reviews</a></li>
-                        </ul>
-                        <div class="tab-content" id="myTabContent">
-                            <div class="tab-pane active fade show description" role="tabpanel" id="description">
-                                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc quam urna, dignissim
-                                    nec auctor in, mattis vitae leo. Lorem ipsum dolor sit amet, consectetur adipiscing
-                                    elit.Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc quam urna,
-                                    dignissim nec auctor in, mattis vitae leo. Lorem ipsum dolor sit amet, consectetur
-                                    adipiscing elit.</p>
-                                <div class="row">
-                                    <div class="col-md-5">
-                                        <figure class="figure"><img class="img-fluid figure-img"
-                                                src="{{ url('/') }}/assets/img/tech/image3.png"></figure>
-                                    </div>
-                                    <div class="col-md-7">
-                                        <h4>Lorem Ipsum</h4>
-                                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc quam urna,
-                                            dignissim nec auctor in, mattis vitae leo. Lorem ipsum dolor sit amet,
-                                            consectetur adipiscing elit.</p>
-                                    </div>
-                                </div>
-                                <div class="row">
-                                    <div class="col-md-7 right">
-                                        <h4>Lorem Ipsum</h4>
-                                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc quam urna,
-                                            dignissim nec auctor in, mattis vitae leo. Lorem ipsum dolor sit amet,
-                                            consectetur adipiscing elit.</p>
-                                    </div>
-                                    <div class="col-md-5">
-                                        <figure class="figure"><img class="img-fluid figure-img"
-                                                src="{{ url('/') }}/assets/img/tech/image3.png"></figure>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="tab-pane fade show specifications" role="tabpanel" id="specifications">
-                                <div class="table-responsive table-bordered">
-                                    <table class="table table-bordered">
-                                        <tbody>
-                                            <tr>
-                                                <td class="stat">Display</td>
-                                                <td>5.2"</td>
-                                            </tr>
-                                            <tr>
-                                                <td class="stat">Camera</td>
-                                                <td>12MP</td>
-                                            </tr>
-                                            <tr>
-                                                <td class="stat">RAM</td>
-                                                <td>4GB</td>
-                                            </tr>
-                                            <tr>
-                                                <td class="stat">OS</td>
-                                                <td>iOS</td>
-                                            </tr>
-                                        </tbody>
-                                    </table>
-                                </div>
-                            </div>
-                            <div class="tab-pane fade show" role="tabpanel" id="reviews">
-                                <div class="reviews">
-                                    <div class="review-item">
-                                        <div class="rating"><img src="{{ url('/') }}/assets/img/star.svg"><img
-                                                src="{{ url('/') }}/assets/img/star.svg"><img src="{{ url('/') }}/assets/img/star.svg"><img
-                                                src="{{ url('/') }}/assets/img/star.svg"><img src="{{ url('/') }}/assets/img/star-empty.svg"></div>
-                                        <h4>Incredible product</h4><span class="text-muted"><a href="#">John Smith</a>,
-                                            20 Jan 2018</span>
-                                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec augue nunc,
-                                            pretium at augue at, convallis pellentesque ipsum. Lorem ipsum dolor sit
-                                            amet, consectetur adipiscing elit.</p>
-                                    </div>
-                                </div>
-                                <div class="reviews">
-                                    <div class="review-item">
-                                        <div class="rating"><img src="{{ url('/') }}/assets/img/star.svg"><img
-                                                src="{{ url('/') }}/assets/img/star.svg"><img src="{{ url('/') }}/assets/img/star.svg"><img
-                                                src="{{ url('/') }}/assets/img/star.svg"><img src="{{ url('/') }}/assets/img/star-empty.svg"></div>
-                                        <h4>Incredible product</h4><span class="text-muted"><a href="#">John Smith</a>,
-                                            20 Jan 2018</span>
-                                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec augue nunc,
-                                            pretium at augue at, convallis pellentesque ipsum. Lorem ipsum dolor sit
-                                            amet, consectetur adipiscing elit.</p>
-                                    </div>
-                                </div>
-                                <div class="reviews">
-                                    <div class="review-item">
-                                        <div class="rating"><img src="{{ url('/') }}/assets/img/star.svg"><img
-                                                src="{{ url('/') }}/assets/img/star.svg"><img src="{{ url('/') }}/assets/img/star.svg"><img
-                                                src="{{ url('/') }}/assets/img/star.svg"><img src="{{ url('/') }}/assets/img/star-empty.svg"></div>
-                                        <h4>Incredible product</h4><span class="text-muted"><a href="#">John Smith</a>,
-                                            20 Jan 2018</span>
-                                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec augue nunc,
-                                            pretium at augue at, convallis pellentesque ipsum. Lorem ipsum dolor sit
-                                            amet, consectetur adipiscing elit.</p>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
             </div>
+        @endif
         </div>
     </section>
 </main>
+@endsection
+@section('bottom')
+@if(!isset($detail['result']))
+<script>
+    var type = "{{ $detail['type'] }}";
+    @if($detail['type'] == 'variable')
+    var price_list = [];
+
+    @foreach($detail['price'] as $key => $price)
+    @php
+    if ($loop->first) {
+        $lowest = $highest = $price;
+    } else {
+        if ($price < $lowest) {
+            $lowest = $price;
+        }
+        if ($price > $highest) {
+            $highest = $price;
+        }
+    }
+    @endphp
+    price_list['{{$key}}'] = '{{$price}}';
+    @endforeach
+    @if($lowest == $highest)
+    var price_text = 'RM {{number_format($lowest,2)}}';
+    @else
+    var price_text = 'RM {{number_format($lowest,2)}} - RM {{number_format($highest,2)}}';
+    @endif
+    @endif
+    $(document).ready(function() {
+        if (type == 'variable') {
+            $('#price_text').html(price_text);
+        }
+        $("#variant").change(function() {
+            $("#variant_error").hide();
+            $('#price_text').html("RM " + (price_list[$(this).val()] * $("#quantity").val()).toLocaleString());
+        });
+
+        $("#quantity").change(function(){
+            if (type == 'variable') {
+                $('#price_text').html("RM " + (price_list[$("#variant").val()] * $(this).val()).toLocaleString());
+            }
+            else{
+                $('#price_text').html("RM " + ($("#price").val() * $(this).val()).toLocaleString());
+            }
+        });
+        $("#addToCart").click(function() {
+            var proceed = true;
+            var price = 0;
+            var quantity = $("#quantity").val();
+            var item_id = '0';
+            var item_name = $("#item_name").html();
+            if (type == 'variable') {
+                item_id = $("#variant").val();
+                if (item_id == '' || item_id == null) {
+                    proceed = false;
+                    $("#variant_error").removeClass('d-none');
+                    $("#variant_error").show();
+                    return;
+                }
+                price = price_list[item_id];
+            } else {
+                price = $("#price").val();
+                item_id = $("#item_id").val();
+            }
+            if (proceed) {
+                $.ajax({
+                    type: 'POST',
+                    url: "{{route('cartStore')}}",
+                    dataType: 'json',
+                    data: {
+                        item_id: item_id,
+                        item_name: item_name,
+                        price: price,
+                        quantity: quantity,
+                        _token: '{{ csrf_token() }}',
+                    },
+                    success: function(data) {
+                        if(data.status){
+                            window.location.replace("{{route('showCart')}}");
+                        }
+                        else{
+                            if(data.msg=='Not Login'){
+                                window.location.replace("{{ route('login') }}");
+                            }
+                        }               
+                    },
+                    error: function(){
+                        window.location.reload();
+                    },
+                    beforeSend: function() {
+                        //do something
+                    }
+                });
+
+
+            }
+        });
+
+    });
+</script>
+@endif
 @endsection
