@@ -39,11 +39,9 @@
                     </div>
                 </div>
                 <button class="btn btn-primary btn-block" type="submit">Log In</button>
-                @if (Route::has('password.request'))
-                <a class="btn btn-link" href="{{ route('password.request') }}">
-                    {{ __('Forgot Your Password?') }}
-                </a>
-                @endif
+                <div class="mt-2">Don't have an account? <a href="{{ route('register') }}">
+                   Sign Up Now!
+                </a></div>
             </form>
         </div>
     </section>

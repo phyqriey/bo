@@ -43,6 +43,9 @@
                     <input class="form-control" type="password" id="password-confirm" name="password_confirmation" required autocomplete="new-password" />
                 </div>
                 <button class="btn btn-primary btn-block" type="submit">Sign Up</button>
+                <div class="mt-2">Already have an account? <a href="{{ route('login') }}">
+                Login Here
+                </a></div>
             </form>
         </div>
     </section>
