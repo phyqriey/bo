@@ -66,7 +66,7 @@
                                                     <h6></h6>
                                                     @endif
                                                     @endif
-                                                    <a class="btn btn-primary btn-sm" href="{{ url('/') }}/product/{{$product->id}}" target="_blank" type="button"><i class="icon-basket"></i>
+                                                    <a class="btn btn-primary btn-sm" href="{{ url('/') }}/product/{{$product->id}}"  type="button"><i class="icon-basket"></i>
                                                     Add to Cart</a>
                                         </div>
                                     </div>

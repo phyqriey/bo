@@ -69,7 +69,9 @@
                             <h4><span class="text">Discount</span><span class="price">RM 0.00</span></h4>
                             <h4><span class="text">Shipping</span><span class="price">RM 0.00</span></h4>
                             <h4><span class="text">Total</span><span class="price">RM {{number_format($subtotal,2)}}</span></h4>
-                            <a id="checkout" class="btn btn-primary btn-block btn-lg" type="button">Checkout</a>
+                            <a id="checkout" class="mt-2 btn btn-primary btn-block btn-lg" type="button"><i class="fa fa-credit-card"></i> Checkout</a>
+
+                            <a href="{{route('catalogueList')}}" class="btn btn-block btn-lg btn-outline-info" role="button">Continue Shopping</a>
                         </div>
                     </div>
                 </div>
