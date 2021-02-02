@@ -8,7 +8,7 @@
             <div class="block-heading">
                 <h2 class="text-info">Shopping Cart</h2>
             </div>
-            @if($cartId==0)
+            @if($cartItems->isEmpty())
             <div class="content">
                 <div class="row no-gutters">
                     <div class="col-md-12 col-lg-8">
@@ -16,7 +16,7 @@
                             <div class="jumbotron">
                                 <h1>Cart Empty</h1>
                                 <p>Your cart is empty.</p>
-                                <p><a class="btn btn-primary" role="button">Continue Shopping</a></p>
+                                <p><a href="{{route('catalogueList')}}" class="btn btn-primary" role="button">Continue Shopping</a></p>
                             </div>
                         </div>
                     </div>

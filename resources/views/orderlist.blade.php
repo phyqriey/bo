@@ -71,7 +71,7 @@
                             <div class="jumbotron">
                                 <h1>No orders found</h1>
                                 <p>You have not made any purchased yet</p>
-                                <p><a class="btn btn-primary" role="button" href="{{route('catalogueList')}}">Continue Shopping</a></p>
+                                <p><a class="btn btn-primary" role="button" href="{{route('catalogueList')}}">Browse Catalogue</a></p>
                             </div>
                         </div>
                     </div>
